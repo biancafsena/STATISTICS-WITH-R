@@ -1,0 +1,174 @@
+---
+title: "Entrega Final"
+author: "Grupo03"
+date: "2023-07-01"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+install.packages("ggplot2")
+
+#---Exercicio 03
+
+```{r}
+library(ggplot2)
+
+
+library(readr)
+dados <- read_csv("C:/Users/danie/Desktop/Projeto Integrado R - Parte Final/Bases Excel - Projeto Final R/train.csv")
+tipos_de_dados <- sapply(dados, class)
+print(tipos_de_dados)
+
+```
+
+#---Exercicio 05
+
+# Medidas Resumo (Head e Summary)
+
+```{r}
+library(readr)
+library(ggplot2)
+dados <- read_csv("C:/Users/danie/Desktop/Projeto Integrado R - Parte Final/Bases Excel - Projeto Final R/train.csv")
+
+head(dados)
+summary(dados)
+
+ggplot(dados, aes(x = a14fd026ce)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Distribuição da Variável Quantitativa")
+
+ggplot(dados, aes(x = target)) +
+  geom_histogram(fill = "steelblue", bins = 10) +
+  labs(title = "Histograma da Variável Numérica")
+```
+
+#---Exercicio 06
+
+
+```{r}
+library(ggplot2)
+
+data <- read.csv("C:/Users/danie/Desktop/Projeto Integrado R - Parte Final/Bases Excel - Projeto Final R/Bases reduzidas/train.csv", stringsAsFactors = FALSE)
+
+# Tabela de frequência bivariada
+tabela_frequencia <- table(data[, 28], as.factor(data[, 108]))
+tabela_frequencia
+
+# Realizar o teste qui-quadrado
+resultado_teste <- chisq.test(tabela_frequencia)
+resultado_teste
+
+# Gráfico 100% empilhado
+data[, 28] <- as.factor(data[, 28])
+data[, 108] <- as.factor(data[, 108])
+
+ggplot(data, aes(x = data[, 28], fill = data[, 108])) +
+  geom_bar(position = "fill") +
+  labs(title = "Gráfico 100% Empilhado") +
+  scale_fill_discrete(name = "Target")
+
+```
+
+#---Exercicio 07
+
+```{r}
+library(ggplot2)
+
+data <- read.csv("C:/Users/danie/Desktop/Projeto Integrado R - Parte Final/Bases Excel - Projeto Final R/train.csv")
+
+# Gráfico de dispersão
+ggplot(data, aes(x = id, y = target)) +
+  geom_point() +
+  labs(title = "Gráfico de Dispersão")
+  
+  # Análise de correlação de Pearson
+correlacao <- cor(data$id, data$target, method = "pearson")
+correlacao
+
+
+# Matriz de correlação de Pearson
+matriz_correlacao <- cor(data[, c("id", "target")], method = "pearson")
+matriz_correlacao
+
+```
+
+#---Exercicio 09
+
+
+```{r}
+library(ggplot2)
+
+# Carregar os dados
+
+train <- read.csv("C:/Users/danie/Desktop/Projeto Integrado R - Parte Final/Bases Excel - Projeto Final R/train.csv", stringsAsFactors = FALSE)
+
+test <- read.csv("C:/Users/danie/Desktop/Projeto Integrado R - Parte Final/Bases Excel - Projeto Final R/test.csv", stringsAsFactors = FALSE)
+
+# Variáveis preditoras
+variaveis_preditoras <- train[, c("abca7a848f", "ae08d2297e", "a14fd026ce")]
+
+# Variável resposta
+variavel_resposta <- train$target
+
+# Modelo de Regressão Linear Múltipla
+modelo <- lm(variavel_resposta ~ ., data = data.frame(variaveis_preditoras))
+summary(modelo)
+
+
+# Análise de resíduos
+residuos <- residuals(modelo)
+
+# Gráfico dos resíduos
+ggplot() +
+  geom_histogram(aes(residuos), fill = "steelblue", bins = 20) +
+  labs(title = "Histograma de Resíduos")
+
+# Medidas de erros na amostra train.csv
+train_pred <- predict(modelo, newdata = train)
+erro_train <- train_pred - train$variavel_resposta
+mean_squared_error_train <- mean(erro_train^2)
+root_mean_squared_error_train <- sqrt(mean_squared_error_train)
+mean_absolute_error_train <- mean(abs(erro_train))
+
+# Exibir as medidas de erro
+data.frame(MSE = mean_squared_error_train,
+           RMSE = root_mean_squared_error_train,
+           MAE = mean_absolute_error_train)
+           
+# Previsão do modelo na amostra test.csv
+test_pred <- predict(modelo, newdata = test)
+
+# Medidas de erros na amostra test.csv
+erro_test <- test_pred - test$variavel_resposta
+mean_squared_error_test <- mean(erro_test^2)
+root_mean_squared_error_test <- sqrt(mean_squared_error_test)
+mean_absolute_error_test <- mean(abs(erro_test))
+
+#medidas de erro
+data.frame(MSE = mean_squared_error_test,
+           RMSE = root_mean_squared_error_test,
+           MAE = mean_absolute_error_test)
+
+#previsão com base nas variáveis preditoras
+
+simulador_modelo <- function(variavel1, col){}
+```
+
+
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
